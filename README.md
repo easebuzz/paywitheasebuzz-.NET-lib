@@ -1,7 +1,7 @@
 
 .NET integration kit for pay with easebuzz pay.easebuzz.in
 
-# Requirement Software
+# Software Requirement
 *setup .NET kits on test/devlopement/production enviroment install below software*
 
 1. Visual Studio
