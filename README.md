@@ -22,6 +22,7 @@ https://docs.easebuzz.in/
 
 1. Copy paste the easebuzz class which is present in Default.aspx.cs to your namespace.
 2.  Setup initiate payment 
+
 	2.1 create object of the class by pass key,salt,environment
 	```
 		string salt = "XXXXXX";
@@ -70,6 +71,7 @@ https://docs.easebuzz.in/
 	3.4 ready to start  transactional information real time.
 	
 4. setup transactional records date wise.
+
 	4.1 create object of the class by pass key,salt,environment
 	```
 		string salt = "XXXXXX";
@@ -89,6 +91,7 @@ https://docs.easebuzz.in/
 	4.4 ready with transactional information date wise.
 
 5. setup payout information date wise.
+
 	5.1 create object of the class by pass key,salt,environment
 	```
 		string salt = "XXXXXX";
@@ -108,6 +111,7 @@ https://docs.easebuzz.in/
 	5.4 ready to start receiving payout information date wise.
 
 6. setup Refund api so that you can start refunding your customers as you needed.
+
 	6.1 create object of the class by pass key,salt,environment
 	```
 		string salt = "XXXXXX";
