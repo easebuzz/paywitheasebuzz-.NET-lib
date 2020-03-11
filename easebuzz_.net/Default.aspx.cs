@@ -35,9 +35,8 @@ namespace easebuzz_.net
 			env = ENV;
 		}
 		// this function is required to initiate payment
-		public string initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid)
+		public string  initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid,String Udf1,String Udf2,String Udf3,String Udf4,String Udf5)
 		{
-
 			string[] hashVarsSeq;
 			string hash_string = string.Empty;
 			string saltvalue = salt;
@@ -48,11 +47,11 @@ namespace easebuzz_.net
 			string productinfo = Productinfo;
 			string surl = Surl;
 			string furl = Furl;
-			string udf1 = "";
-			string udf2 = "";
-			string udf3 = "";
-			string udf4 = "";
-			string udf5 = "";
+			string udf1 = Udf1;
+			string udf2 = Udf2;
+			string udf3 = Udf3;
+			string udf4 = Udf4;
+			string udf5 = Udf5;
             
 			// Generate transaction ID -> make sure this is unique for all transactions
 			Random rnd = new Random();
