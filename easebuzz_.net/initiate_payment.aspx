@@ -137,6 +137,11 @@
                                 <input id="zipcode" class="zipcode" name="zipcode" value="" placeholder="123456">
                             </div>
 
+                              <div class="form-field">
+                                <label for="show_payment_mode">Show Payment Mode</label>
+                                <input id="show_payment_mode" class="show_payment_mode" name="show_payment_mode" value="" placeholder="NB,DC,CC,DAP,MW,UPI,OM,EMI">
+                            </div>
+
                         </div>
                 
                         <input type="hidden" name="initiatePaymentAPI" value="initiatePaymentAPI">

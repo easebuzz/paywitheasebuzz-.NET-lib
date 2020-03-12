@@ -35,7 +35,7 @@ namespace easebuzz_.net
 			env = ENV;
 		}
 		// this function is required to initiate payment
-		public string  initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid,String Udf1,String Udf2,String Udf3,String Udf4,String Udf5)
+		public string  initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid,String Udf1,String Udf2,String Udf3,String Udf4,String Udf5,String Show_payment_mode)
 		{
 			string[] hashVarsSeq;
 			string hash_string = string.Empty;
@@ -52,7 +52,7 @@ namespace easebuzz_.net
 			string udf3 = Udf3;
 			string udf4 = Udf4;
 			string udf5 = Udf5;
-            
+			string ShowPaymentMode = Show_payment_mode;
 			// Generate transaction ID -> make sure this is unique for all transactions
 			Random rnd = new Random();
 			string strHash = Easebuzz_Generatehash512(rnd.ToString() + DateTime.Now);
@@ -82,7 +82,6 @@ namespace easebuzz_.net
 			data.Add("udf4", udf4.Trim());
 			data.Add("udf5", udf5.Trim());
 
-
 			// generate hash
 			hashVarsSeq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10".Split('|'); // spliting hash sequence from config
 			hash_string = "";
@@ -94,7 +93,7 @@ namespace easebuzz_.net
 			hash_string += salt;// appending SALT
 			gen_hash = Easebuzz_Generatehash512(hash_string).ToLower();        //generating hash
 			data.Add("hash", gen_hash);
-
+			data.Add("show_payment_mode", ShowPaymentMode.Trim());
 
 			string strForm = Easebuzz_PreparePOSTForm(easebuzz_action_url, data);
 			return strForm;

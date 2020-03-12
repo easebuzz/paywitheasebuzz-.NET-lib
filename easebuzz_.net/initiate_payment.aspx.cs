@@ -28,12 +28,11 @@ namespace easebuzz_.net
 			string UDF3 = Request.Form["udf3"].Trim();
 			string UDF4 = Request.Form["udf4"].Trim();
 			string UDF5 = Request.Form["udf5"].Trim();
+			string Show_payment_mode = Request.Form["show_payment_mode"].Trim();
             //call the object of class and start payment
             Easebuzz t = new Easebuzz(salt, Key, env);
-			string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl,Txnid,UDF1,UDF2,UDF3,UDF4,UDF5);
+			string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl,Txnid,UDF1,UDF2,UDF3,UDF4,UDF5,Show_payment_mode);
             Page.Controls.Add(new LiteralControl(strForm));
-            
-
         }
 
     }
