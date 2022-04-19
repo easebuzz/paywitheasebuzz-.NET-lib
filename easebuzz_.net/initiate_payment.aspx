@@ -105,6 +105,37 @@
                                 <input id="udf5" class="udf5" name="udf5" value="" placeholder="User description5">
                             </div>
                             
+                            
+                            <div class="form-field">
+                                <label for="udf6">UDF6</label>
+                                <input id="udf6" class="udf6" name="udf6" value="" placeholder="User description6">
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="udf7">UDF7</label>
+                                <input id="udf7" class="udf7" name="udf7" value="" placeholder="User description7">
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="udf8">UDF8</label>
+                                <input id="udf8" class="udf8" name="udf8" value="" placeholder="User description8">
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="udf9">UDF9</label>
+                                <input id="udf9" class="udf9" name="udf9" value="" placeholder="User description9">
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="udf10">UDF10</label>
+                                <input id="udf10" class="udf10" name="udf10" value="" placeholder="User description10">
+                            </div>
+                            
+                            <div class="form-field">
+                                <label for="split_payments">Split Payments</label>
+                                 <input id="split_payments" class="split_payments" name="split_payments" value="" placeholder='{ "axisaccount" : 100, "hdfcaccount" : 100}'>
+                            </div>
+
                             <div class="form-field">
                                 <label for="address1">Address 1</label>
                                 <input id="address1" class="address1" name="address1" value="" 
@@ -140,6 +171,11 @@
                               <div class="form-field">
                                 <label for="show_payment_mode">Show Payment Mode</label>
                                 <input id="show_payment_mode" class="show_payment_mode" name="show_payment_mode" value="" placeholder="NB,DC,CC,DAP,MW,UPI,OM,EMI">
+                            </div>
+
+                             <div class="form-field">
+                                <label for="sub_merchant_id">Sub Merchant Id</label>
+                                <input id="sub_merchant_id" class="sub_merchant_id" name="sub_merchant_id" value="" placeholder="Sub Merchant Id">
                             </div>
 
                         </div>

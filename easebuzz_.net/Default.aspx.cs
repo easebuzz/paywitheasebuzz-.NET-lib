@@ -12,7 +12,6 @@ using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
 
-
 namespace easebuzz_.net
 {
 
@@ -35,7 +34,7 @@ namespace easebuzz_.net
 			env = ENV;
 		}
 		// this function is required to initiate payment
-		public string  initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid,String Udf1,String Udf2,String Udf3,String Udf4,String Udf5,String Show_payment_mode)
+		public string  initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid,String Udf1,String Udf2,String Udf3,String Udf4,String Udf5, String Udf6, String Udf7, String Udf8, String Udf9, String Udf10, String Show_payment_mode, String split_payments, String sub_merchant_id)
 		{
 			string[] hashVarsSeq;
 			string hash_string = string.Empty;
@@ -52,6 +51,11 @@ namespace easebuzz_.net
 			string udf3 = Udf3;
 			string udf4 = Udf4;
 			string udf5 = Udf5;
+			string udf6 = Udf6;
+			string udf7 = Udf7;
+			string udf8 = Udf8;
+			string udf9 = Udf9;
+			string udf10 = Udf10;
 			string ShowPaymentMode = Show_payment_mode;
 			// Generate transaction ID -> make sure this is unique for all transactions
 			Random rnd = new Random();
@@ -81,7 +85,11 @@ namespace easebuzz_.net
 			data.Add("udf3", udf3.Trim());
 			data.Add("udf4", udf4.Trim());
 			data.Add("udf5", udf5.Trim());
-
+			data.Add("udf6", udf6.Trim());
+			data.Add("udf7", udf7.Trim());
+			data.Add("udf8", udf8.Trim());
+			data.Add("udf9", udf9.Trim());
+			data.Add("udf10", udf10.Trim());
 			// generate hash
 			hashVarsSeq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10".Split('|'); // spliting hash sequence from config
 			hash_string = "";
@@ -94,6 +102,13 @@ namespace easebuzz_.net
 			gen_hash = Easebuzz_Generatehash512(hash_string).ToLower();        //generating hash
 			data.Add("hash", gen_hash);
 			data.Add("show_payment_mode", ShowPaymentMode.Trim());
+
+			if (split_payments.Length > 0) {
+				data.Add("split_payments", split_payments);
+			} if (sub_merchant_id.Length > 0 && split_payments.Length == 0) {
+				data.Add("sub_merchant_id", sub_merchant_id);
+			}
+
 
 			string strForm = Easebuzz_PreparePOSTForm(easebuzz_action_url, data);
 			return strForm;
@@ -115,7 +130,7 @@ namespace easebuzz_.net
 			{
 
 				strForm.Append("<input type=\"hidden\" name=\"" + key.Key +
-							   "\" value=\"" + key.Value + "\">");
+							   "\" value='" + key.Value + "'>");
 			}
 			strForm.Append("</form>");
 			//Build the JavaScript which will do the Posting operation.

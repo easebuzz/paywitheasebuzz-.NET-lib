@@ -36,3 +36,24 @@
 /Users/Dwivedi/tmp/easebuzz_.net/easebuzz_.net/obj/Debug/easebuzz_.net.csproj.CoreCompileInputs.cache
 /Users/Dwivedi/tmp/easebuzz_.net/easebuzz_.net/obj/Debug/easebuzz_.net.dll
 /Users/Dwivedi/tmp/easebuzz_.net/easebuzz_.net/obj/Debug/easebuzz_.net.pdb
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\easebuzz_.net.dll.config
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\easebuzz_.net.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\easebuzz_.net.pdb
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\Microsoft.Web.Infrastructure.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.Helpers.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.Mvc.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.Razor.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.WebPages.Deployment.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.WebPages.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.WebPages.Razor.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.Razor.xml
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.Helpers.xml
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.WebPages.Deployment.xml
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.WebPages.xml
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.WebPages.Razor.xml
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\bin\System.Web.Mvc.xml
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\obj\Debug\easebuzz_.net.csproj.AssemblyReference.cache
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\obj\Debug\easebuzz_.net.csproj.CoreCompileInputs.cache
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\obj\Debug\easebuzz_.net.csproj.CopyComplete
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\obj\Debug\easebuzz_.net.dll
+D:\Easebuzz Net Kit\paywitheasebuzz-.NET-lib-master\easebuzz_.net\obj\Debug\easebuzz_.net.pdb
