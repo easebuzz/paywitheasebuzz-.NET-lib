@@ -54,7 +54,8 @@ namespace easebuzz_.net
 				{
 					order_id = Request.Form["txnid"];
 
-					//Response.Write("value matched");
+					//Response.Write("value matched");+		this	{ASP.success_aspx}	easebuzz_.net.success {ASP.success_aspx}
+
 					if (Request.Form["status"] == "success")
 					{
 						Response.Write(Request.Form);

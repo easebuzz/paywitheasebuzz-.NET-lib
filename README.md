@@ -21,46 +21,80 @@ https://docs.easebuzz.in/
 # Process for integrate .net kit in <Your Project>
 
 1. Copy paste the easebuzz class which is present in Default.aspx.cs to your namespace.
-2.  Setup initiate payment 
-
-	2.1 create object of the class by pass key,salt,environment
+2. Setup initiate payment 
+	
+	2.1 Decleare key,salt,environment and iframe flag in Web.config inside <appSettings>
 	```
-		string salt = "XXXXXX";
-		string Key = "XXXXXX";
-		string env = "test";		// test for testing env and prod for production use wisely
-		Easebuzz t = new Easebuzz(salt, Key, env);
+			<appSettings>
+				<add key="key" value="XXXXX" />
+				<add key="salt" value="XXXXX" />
+				<add key="env" value="XXXXX" /> // test for testing env and prod for production use wisely
+				<add key="enable_iframe" value="false" />  // if you want to use iframe the  it should be true otherwise it should false
+			</appSettings>
+			
+  ````
+  
+	2.2 Create object of the Easebuzz class by pass key,salt,environment for call the initiate payment function and handle response
+	```
+			string salt = System.Configuration.ConfigurationSettings.AppSettings["salt"];
+			string Key = System.Configuration.ConfigurationSettings.AppSettings["key"];
+			string env = System.Configuration.ConfigurationSettings.AppSettings["env"];
+			string is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
+
+			Easebuzz t = new Easebuzz(salt, Key, env);
+			string result = t.initiatePaymentAPI(dict);
+
+			if (is_enable_iframe == "true") {	// code for iframe
+				if (((JToken)result).Type == JTokenType.Object)
+				{
+					Response.Write(result);
+				}
+				else
+				{
+					this.accessKey = result;
+					ClientScript.RegisterClientScriptBlock(GetType(), "Javascript", "processPayment()", true);
+				}	
+			}
+			else
+			{
+				bool isUri = Uri.IsWellFormedUriString(result, UriKind.RelativeOrAbsolute);
+				if (isUri)
+				{
+					Response.Write(string.Format("<script type='text/javascript'>window.open('{0}', '_self');</script>", result));
+				}
+				else
+				{
+					Response.Write(result);
+				}
+			}
 	````
-	2.2 call the initiate paymentv function and invoke the form submit
-	```
-		string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl,Txnid,UDF1,UDF2,UDF3,UDF4,UDF5, UDF6, UDF7, UDF8, UDF9, UDF10, Show_payment_mode,   
-		split_payments, sub_merchant_id);
-    	Page.Controls.Add(new LiteralControl(strForm));
+	
+    2.3 Pass all required parameters to initiate payment using Dictionary<string, string> (Sample show as the below)
     ```
-    2.3 Parameters required in initiate payment
-    ```
-    		string amount = Request.Form["amount"].Trim();
-		string firstname = Request.Form["firstname"].Trim();
-		string email = Request.Form["email"].Trim();
-		string phone = Request.Form["phone"].Trim();
-		string productinfo = Request.Form["productinfo"].Trim();
-		string surl = Request.Form["surl"].Trim();
-		string furl = Request.Form["furl"].Trim();
-		string Txnid = Request.Form["Txnid"].Trim();
-		string UDF1 = Request.Form["udf1"].Trim();
-		string UDF2 = Request.Form["udf2"].Trim();
-		string UDF3 = Request.Form["udf3"].Trim();
-		string UDF4 = Request.Form["udf4"].Trim();
-		string UDF5 = Request.Form["udf5"].Trim();
-		string UDF6 = Request.Form["udf6"].Trim();
-		string UDF7 = Request.Form["udf7"].Trim();
-		string UDF8 = Request.Form["udf8"].Trim();
-		string UDF9 = Request.Form["udf9"].Trim();
-		string UDF10 = Request.Form["udf10"].Trim();
-		string Show_payment_mode = Request.Form["show_payment_mode"].Trim();
-		string split_payments = Request.Form["split_payments"].Trim();
-		string sub_merchant_id = Request.Form["sub_merchant_id"].Trim();
-
+			Dictionary<string, string> dict = new Dictionary<string, string>();
+			dict.Add("txnid", Txnid);
+			dict.Add("key", Key);
+			amount = amount;
+			dict.Add("amount", amount);
+			dict.Add("firstname", firstname.Trim());
+			dict.Add("email", email.Trim());
+			dict.Add("phone", phone.Trim());
+			dict.Add("productinfo", productinfo.Trim());
+			dict.Add("surl", surl.Trim());
+			dict.Add("furl", furl.Trim());
+			dict.Add("udf1", UDF1.Trim());
+			dict.Add("udf2", UDF2.Trim());
+			dict.Add("udf3", UDF3.Trim());
+			dict.Add("udf4", UDF4.Trim());
+			dict.Add("udf5", UDF5.Trim());
+			dict.Add("udf6", UDF6.Trim());
+			dict.Add("udf7", UDF7.Trim());
+			dict.Add("udf8", UDF8.Trim());
+			dict.Add("udf9", UDF9.Trim());
+			dict.Add("udf10", UDF10.Trim());			
+		
 	```
+	
 	2.4 ready to start receiving payment online.
 
 3. setup transaction api in your system

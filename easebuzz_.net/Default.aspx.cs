@@ -11,6 +11,13 @@ using System.Text;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using RestSharp;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace easebuzz_.net
 {
@@ -27,6 +34,10 @@ namespace easebuzz_.net
 		public string salt = string.Empty;
 		public string Key = string.Empty;
 		public string env = string.Empty;
+		public string is_enable_iframe;
+		string empty_value = "";
+
+
 		public Easebuzz(string SALT, string KEY, string ENV)
 		{
 			salt = SALT;
@@ -34,116 +45,137 @@ namespace easebuzz_.net
 			env = ENV;
 		}
 		// this function is required to initiate payment
-		public string  initiatePaymentAPI(string Amount, String Firstname, String Email, String Phone, String Productinfo, String Surl, String Furl,String Txnid,String Udf1,String Udf2,String Udf3,String Udf4,String Udf5, String Udf6, String Udf7, String Udf8, String Udf9, String Udf10, String Show_payment_mode, String split_payments, String sub_merchant_id)
+
+		internal string initiatePaymentAPI(Dictionary<string, string> dict)
 		{
-			string[] hashVarsSeq;
-			string hash_string = string.Empty;
-			string saltvalue = salt;
-			string amount = Amount;
-			string firstname = Firstname;
-			string email = Email;
-			string phone = Phone;
-			string productinfo = Productinfo;
-			string surl = Surl;
-			string furl = Furl;
-			string udf1 = Udf1;
-			string udf2 = Udf2;
-			string udf3 = Udf3;
-			string udf4 = Udf4;
-			string udf5 = Udf5;
-			string udf6 = Udf6;
-			string udf7 = Udf7;
-			string udf8 = Udf8;
-			string udf9 = Udf9;
-			string udf10 = Udf10;
-			string ShowPaymentMode = Show_payment_mode;
-			// Generate transaction ID -> make sure this is unique for all transactions
-			Random rnd = new Random();
-			string strHash = Easebuzz_Generatehash512(rnd.ToString() + DateTime.Now);
-			//txnid = strHash.ToString().Substring(0, 20);
-			txnid = Txnid;
+			string result = "";
 
-			string paymentUrl = getURL();
-			// Get configs from web config
-			easebuzz_action_url = paymentUrl + "/pay/secure";
+			if (emptyValidation(dict)) {
+				var obj = new
+				{
+					status = "0",
+					data = "Mandatory parameter " + empty_value+ " can not empty"
+				};
+				return obj.ToString();
 
-			// generate hash table
-			System.Collections.Hashtable data = new System.Collections.Hashtable(); // adding values in gash table for data post
-			data.Add("txnid", txnid);
-			data.Add("key", Key);
-			//string AmountForm = Convert.ToDecimal(amount.Trim()).ToString("g29");// eliminating trailing zeros
-			amount = amount;
-			data.Add("amount", amount);
-			data.Add("firstname", firstname.Trim());
-			data.Add("email", email.Trim());
-			data.Add("phone", phone.Trim());
-			data.Add("productinfo", productinfo.Trim());
-			data.Add("surl", surl.Trim());
-			data.Add("furl", furl.Trim());
-			data.Add("udf1", udf1.Trim());
-			data.Add("udf2", udf2.Trim());
-			data.Add("udf3", udf3.Trim());
-			data.Add("udf4", udf4.Trim());
-			data.Add("udf5", udf5.Trim());
-			data.Add("udf6", udf6.Trim());
-			data.Add("udf7", udf7.Trim());
-			data.Add("udf8", udf8.Trim());
-			data.Add("udf9", udf9.Trim());
-			data.Add("udf10", udf10.Trim());
-			// generate hash
-			hashVarsSeq = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10".Split('|'); // spliting hash sequence from config
-			hash_string = "";
-			foreach (string hash_var in hashVarsSeq)
-			{
-				hash_string = hash_string + (data.ContainsKey(hash_var) ? data[hash_var].ToString() : "");
-				hash_string = hash_string + '|';
 			}
-			hash_string += salt;// appending SALT
-			gen_hash = Easebuzz_Generatehash512(hash_string).ToLower();        //generating hash
-			data.Add("hash", gen_hash);
-			data.Add("show_payment_mode", ShowPaymentMode.Trim());
+			else
+            {
+				// generate hash
+				string hashVarsSeq = dict["key"] + "|" + dict["txnid"] + "|" + dict["amount"] + "|" + dict["productinfo"] + "|" + dict["firstname"] + "|"
+					+ dict["email"] + "|" + dict["udf1"] + "|" + dict["udf2"] + "|" + dict["udf3"] + "|" + dict["udf4"] + "|" + dict["udf5"] + "|" + dict["udf6"] + "|" + dict["udf7"] + "|"
+					+ dict["udf8"] + "|" + dict["udf9"] + "|" + dict["udf10"] + "|" + salt; // spliting hash sequence from config
 
-			if (split_payments.Length > 0) {
-				data.Add("split_payments", split_payments);
-			} if (sub_merchant_id.Length > 0 && split_payments.Length == 0) {
-				data.Add("sub_merchant_id", sub_merchant_id);
+				gen_hash = Easebuzz_Generatehash512(hashVarsSeq).ToLower();        //generating hash
+
+				dict.Add("hash", gen_hash);
+
+				ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+				var client = new RestClient(getURL());
+				RestRequest request = new RestRequest("/payment/initiateLink");
+
+				foreach (var data in dict)
+				{
+					request.AddParameter(data.Key, data.Value);
+				}
+				var response = client.Post(request);
+
+				var responseDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ToString());
+
+				is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
+
+				if (responseDict != null && responseDict["status"] == "1")
+				{
+					if (!string.IsNullOrEmpty(responseDict["data"]))
+					{
+						if (is_enable_iframe == "true")
+						{
+							result = responseDict["data"];
+						}
+						else
+						{
+							result = getURL() + "/pay/" + responseDict["data"];
+
+						}
+					}
+				}
+				else
+				{
+					result = response.Content.ToString();
+
+				}
+
+
+				return result;
 			}
-
-
-			string strForm = Easebuzz_PreparePOSTForm(easebuzz_action_url, data);
-			return strForm;
-
+			
 		}
 
-		//prepare a postform for redirection to payment gateway
-		public string Easebuzz_PreparePOSTForm(string url, System.Collections.Hashtable data)
-		{
-			//Set a name for the form
-			string formID = "PostForm";
-			//Build the form using the specified data to be posted.
-			StringBuilder strForm = new StringBuilder();
-			strForm.Append("<form id=\"" + formID + "\" name=\"" +
-						   formID + "\" action=\"" + url +
-						   "\" method=\"POST\">");
+		public bool emptyValidation(Dictionary<string, string> dictionary)
+        {
+			bool isValid = false;
 
-			foreach (System.Collections.DictionaryEntry key in data)
-			{
+			if (dictionary != null)
+            {
+				if (string.IsNullOrEmpty(dictionary["key"])) {
+					empty_value = "Merchant Key";
+					isValid = true;
+				}
+				else if (string.IsNullOrEmpty(dictionary["txnid"])) {
+					empty_value = "Transaction Id";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(dictionary["amount"])) {
+					empty_value = "Amount";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(dictionary["productinfo"])) {
+					empty_value = "Product Infomation";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(dictionary["firstname"])) {
+					empty_value = "First Name";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(dictionary["email"])) {
+					empty_value = "Email";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(dictionary["phone"])) {
+					empty_value = "Phone";
+					isValid = true;
+				}
+				else if(!string.IsNullOrEmpty(dictionary["phone"])) {
+					if (dictionary["phone"].Length != 10)
+                    {
+						empty_value = "Phone number must be 10 digit";
+						isValid = true;
 
-				strForm.Append("<input type=\"hidden\" name=\"" + key.Key +
-							   "\" value='" + key.Value + "'>");
+					}
+				}
+				else if(string.IsNullOrEmpty(dictionary["surl"])) {
+					empty_value = "Success URL";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(dictionary["furl"])) {
+					empty_value = "Failure URL";
+					isValid = true;
+				}
+				else if(string.IsNullOrEmpty(salt)) {
+					empty_value = "Merchant Salt Key";
+					isValid = true;
+				}
+
 			}
-			strForm.Append("</form>");
-			//Build the JavaScript which will do the Posting operation.
-			StringBuilder strScript = new StringBuilder();
-			strScript.Append("<script language='javascript'>");
-			strScript.Append("var v" + formID + " = document." +
-							 formID + ";");
-			strScript.Append("v" + formID + ".submit();");
-			strScript.Append("</script>");
-			//Return the form and the script concatenated.
-			//(The order is important, Form then JavaScript)
-			return strForm.ToString() + strScript.ToString();
+			else
+            {
+				isValid = false;
+			}
+			return isValid;
 		}
+
+
 
 		// hashcode generation
 		public string Easebuzz_Generatehash512(string text)
@@ -156,15 +188,13 @@ namespace easebuzz_.net
 			SHA512Managed hashString = new SHA512Managed();
 			string hex = "";
 			hashValue = hashString.ComputeHash(message);
-			foreach (byte x in hashValue)
-			{
+			
+			foreach (byte x in hashValue) {
 				hex += String.Format("{0:x2}", x);
 			}
 			return hex;
-
 		}
 
-        
 
 		//get url using env varibale
 		public string getURL()
@@ -213,7 +243,7 @@ namespace easebuzz_.net
 			postData += "&amount=" + amount;
 			postData += "&email=" + email;
 			postData += "&hash=" + gen_hash;
-
+			
 			string url = "https://dashboard.easebuzz.in/transaction/v1/refund";
 
 			var request = (HttpWebRequest)WebRequest.Create(url);
@@ -232,6 +262,8 @@ namespace easebuzz_.net
 			var response = (HttpWebResponse)request.GetResponse();
 
 			var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+			
+
 			return responseString;
 		}
 

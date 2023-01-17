@@ -7,6 +7,40 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="assets/css/style.css">
 	<title>initiate_payment</title>
+
+       <script type="text/javascript">
+
+           function processPayment() {
+               var access_key = "<%=accessKey%>";
+               var merchant_key = "<%=Key%>";
+               var env = "<%=env%>";
+
+               //alert(env);
+               var easebuzzCheckout = new EasebuzzCheckout(merchant_key, env)
+
+               var options = {
+                   access_key: access_key, // access key received via Initiate Payment
+
+                   onResponse: (response) => {
+                       console.log(response);
+                   },
+                   theme: "#123456" // color hex
+               }
+               easebuzzCheckout.initiatePayment(options);
+
+           }
+       </script>
+    <script type="text/javascript" src="https://ebz-static.s3.ap-south-1.amazonaws.com/easecheckout/easebuzz-checkout.js"></script>
+    <style type="text/css">
+        .auto-style1
+        {
+            width: 93px;
+        }
+        .auto-style2
+        {
+            width: 25px;
+        }
+    </style>
 </head>
 
     <body>
@@ -183,6 +217,8 @@
                         <input type="hidden" name="initiatePaymentAPI" value="initiatePaymentAPI">
                         <div class="btn-submit">
                             <asp:Button id="button1" runat="server" Text="initiate payment" OnClick="button1Clicked" />
+        
+    </style>
                         </div>
                     </div>
                 </form>

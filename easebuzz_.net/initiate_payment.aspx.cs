@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,10 +12,14 @@ namespace easebuzz_.net
 		public string salt = System.Configuration.ConfigurationSettings.AppSettings["salt"];
         public string Key = System.Configuration.ConfigurationSettings.AppSettings["key"];
 
-        public string env = "prod";
-        
+		//        public string env = "prod";
+		public string env = System.Configuration.ConfigurationSettings.AppSettings["env"];
+		public string is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
+
+		public string accessKey;
+
 		//initiate payment called
-        public void button1Clicked(object sender, EventArgs args)
+		public void button1Clicked(object sender, EventArgs args)
         {   //form the mandatory fields 
 			string amount = Request.Form["amount"].Trim();
 			string firstname = Request.Form["firstname"].Trim();
@@ -41,11 +46,69 @@ namespace easebuzz_.net
 			string split_payments = Request.Form["split_payments"].Trim();
 			string sub_merchant_id = Request.Form["sub_merchant_id"].Trim();
 
-			//call the object of class and start payment
+			Dictionary<string, string> dict = new Dictionary<string, string>();
+			dict.Add("txnid", Txnid);
+			dict.Add("key", Key);
+			amount = amount;
+			dict.Add("amount", amount);
+			dict.Add("firstname", firstname.Trim());
+			dict.Add("email", email.Trim());
+			dict.Add("phone", phone.Trim());
+			dict.Add("productinfo", productinfo.Trim());
+			dict.Add("surl", surl.Trim());
+			dict.Add("furl", furl.Trim());
+			dict.Add("udf1", UDF1.Trim());
+			dict.Add("udf2", UDF2.Trim());
+			dict.Add("udf3", UDF3.Trim());
+			dict.Add("udf4", UDF4.Trim());
+			dict.Add("udf5", UDF5.Trim());
+			dict.Add("udf6", UDF6.Trim());
+			dict.Add("udf7", UDF7.Trim());
+			dict.Add("udf8", UDF8.Trim());
+			dict.Add("udf9", UDF9.Trim());
+			dict.Add("udf10", UDF10.Trim());
+			
+			dict.Add("show_payment_mode", Show_payment_mode.Trim());
+
+			if (split_payments.Length > 0)
+			{
+				dict.Add("split_payments", split_payments);
+			}
+			if (sub_merchant_id.Length > 0 && split_payments.Length == 0)
+			{
+				dict.Add("sub_merchant_id", sub_merchant_id);
+			}
+
 			Easebuzz t = new Easebuzz(salt, Key, env);
-			string strForm = t.initiatePaymentAPI(amount, firstname, email, phone, productinfo, surl, furl,Txnid,UDF1,UDF2,UDF3,UDF4,UDF5, UDF6, UDF7, UDF8, UDF9, UDF10, Show_payment_mode, split_payments, sub_merchant_id);
-            Page.Controls.Add(new LiteralControl(strForm));
-        }
+			string result = t.initiatePaymentAPI(dict);
+
+			if (is_enable_iframe == "true") {
+				if (((JToken)result).Type == JTokenType.Object)
+				{
+					Response.Write(result);
+				}
+				else
+                {
+					this.accessKey = result;
+					ClientScript.RegisterClientScriptBlock(GetType(), "Javascript", "processPayment()", true);
+				}
+				
+			}
+			else
+            {
+
+				bool isUri = Uri.IsWellFormedUriString(result, UriKind.RelativeOrAbsolute);
+				if (isUri)
+				{
+					Response.Write(string.Format("<script type='text/javascript'>window.open('{0}', '_self');</script>", result));
+				}
+				else
+                {
+					Response.Write(result);
+
+				}
+			}
+		}
 
 	}
 }
