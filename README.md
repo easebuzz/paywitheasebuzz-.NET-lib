@@ -21,80 +21,76 @@ https://docs.easebuzz.in/
 # Process for integrate .net kit in <Your Project>
 
 1. Copy paste the easebuzz class which is present in Default.aspx.cs to your namespace.
-2. Setup initiate payment 
-	
-	2.1 Decleare key,salt,environment and iframe flag in Web.config inside <appSettings>
-	```
-			<appSettings>
-				<add key="key" value="XXXXX" />
-				<add key="salt" value="XXXXX" />
-				<add key="env" value="XXXXX" /> // test for testing env and prod for production use wisely
-				<add key="enable_iframe" value="false" />  // if you want to use iframe the  it should be true otherwise it should false
-			</appSettings>
-			
-  ````
-  
-	2.2 Create object of the Easebuzz class by pass key,salt,environment for call the initiate payment function and handle response
-	```
-			string salt = System.Configuration.ConfigurationSettings.AppSettings["salt"];
-			string Key = System.Configuration.ConfigurationSettings.AppSettings["key"];
-			string env = System.Configuration.ConfigurationSettings.AppSettings["env"];
-			string is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
+2.  Setup initiate payment 
 
-			Easebuzz t = new Easebuzz(salt, Key, env);
-			string result = t.initiatePaymentAPI(dict);
+	2.1 Declare key,salt,environment and iframe (enable/disable) flag in Web.config inside appSettings tag
 
-			if (is_enable_iframe == "true") {	// code for iframe
-				if (((JToken)result).Type == JTokenType.Object)
-				{
-					Response.Write(result);
-				}
-				else
-				{
-					this.accessKey = result;
-					ClientScript.RegisterClientScriptBlock(GetType(), "Javascript", "processPayment()", true);
-				}	
-			}
-			else
-			{
-				bool isUri = Uri.IsWellFormedUriString(result, UriKind.RelativeOrAbsolute);
-				if (isUri)
-				{
-					Response.Write(string.Format("<script type='text/javascript'>window.open('{0}', '_self');</script>", result));
-				}
-				else
-				{
-					Response.Write(result);
-				}
-			}
+	```
+	<appSettings>
+		<add key="key" value="XXXXX" />
+		<add key="salt" value="XXXXX" />
+		<add key="env" value="XXXXX" /> // test for testing env and prod for production use wisely
+		<add key="enable_iframe" value="false" />  // if you want to use iframe then it should be true otherwise it should false
+	</appSettings>
 	````
-	
-    2.3 Pass all required parameters to initiate payment using Dictionary<string, string> (Sample show as the below)
-    ```
-			Dictionary<string, string> dict = new Dictionary<string, string>();
-			dict.Add("txnid", Txnid);
-			dict.Add("key", Key);
-			amount = amount;
-			dict.Add("amount", amount);
-			dict.Add("firstname", firstname.Trim());
-			dict.Add("email", email.Trim());
-			dict.Add("phone", phone.Trim());
-			dict.Add("productinfo", productinfo.Trim());
-			dict.Add("surl", surl.Trim());
-			dict.Add("furl", furl.Trim());
-			dict.Add("udf1", UDF1.Trim());
-			dict.Add("udf2", UDF2.Trim());
-			dict.Add("udf3", UDF3.Trim());
-			dict.Add("udf4", UDF4.Trim());
-			dict.Add("udf5", UDF5.Trim());
-			dict.Add("udf6", UDF6.Trim());
-			dict.Add("udf7", UDF7.Trim());
-			dict.Add("udf8", UDF8.Trim());
-			dict.Add("udf9", UDF9.Trim());
-			dict.Add("udf10", UDF10.Trim());			
-		
+	2.2 To initiate payment create an object of Easebuzz class with key, salt and env then call initiate Payment API function.
+
 	```
-	
+	string salt = System.Configuration.ConfigurationSettings.AppSettings["salt"];
+	string Key = System.Configuration.ConfigurationSettings.AppSettings["key"];
+	string env = System.Configuration.ConfigurationSettings.AppSettings["env"];
+	string is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
+
+	Easebuzz t = new Easebuzz(salt, Key, env);
+	string result = t.initiatePaymentAPI(dict);
+
+	if (is_enable_iframe == "true") {	// code for iframe
+		if (((JToken)result).Type == JTokenType.Object) {
+			Response.Write(result);
+		}
+		else
+		{
+			this.accessKey = result;
+			ClientScript.RegisterClientScriptBlock(GetType(), "Javascript", "processPayment()", true);
+		}	
+	}
+	else
+	{
+		bool isUri = Uri.IsWellFormedUriString(result, UriKind.RelativeOrAbsolute);
+		if (isUri)
+		{
+			Response.Write(string.Format("<script type='text/javascript'>window.open('{0}', '_self');</script>", result));
+		}
+		else
+		{
+			Response.Write(result);
+		}
+	}
+    ```
+    2.3 Pass all required parameters to initiate payment api using Dictionary<string, string> (Sample show as the below)
+    ```
+		Dictionary<string, string> dict = new Dictionary<string, string>();
+		dict.Add("txnid", Txnid);
+		dict.Add("key", Key);
+		amount = amount;
+		dict.Add("amount", amount);
+		dict.Add("firstname", firstname.Trim());
+		dict.Add("email", email.Trim());
+		dict.Add("phone", phone.Trim());
+		dict.Add("productinfo", productinfo.Trim());
+		dict.Add("surl", surl.Trim());
+		dict.Add("furl", furl.Trim());
+		dict.Add("udf1", UDF1.Trim());
+		dict.Add("udf2", UDF2.Trim());
+		dict.Add("udf3", UDF3.Trim());
+		dict.Add("udf4", UDF4.Trim());
+		dict.Add("udf5", UDF5.Trim());
+		dict.Add("udf6", UDF6.Trim());
+		dict.Add("udf7", UDF7.Trim());
+		dict.Add("udf8", UDF8.Trim());
+		dict.Add("udf9", UDF9.Trim());
+		dict.Add("udf10", UDF10.Trim());
+	```
 	2.4 ready to start receiving payment online.
 
 3. setup transaction api in your system
