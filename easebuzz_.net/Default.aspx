@@ -35,6 +35,9 @@
                             <li id="initiate_payment_tab">
                                 <a href="initiate_payment.aspx">Initiate Payment API</a>
                             </li>
+                            <li id="initiate_payment_seamless">
+                                <a href="initiate_payment_seamless.aspx">Initiate Seamless Payment API</a>
+                            </li>
                             <li id="transaction_tab">
                                 <a href="transactional_data.aspx">Transaction API</a>
                             </li>

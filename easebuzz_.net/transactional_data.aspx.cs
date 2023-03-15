@@ -34,7 +34,7 @@ namespace easebuzz_.net
 			string email = Request.Form["email"].Trim();
 			string phone = Request.Form["phone"].Trim();
             
-			Easebuzz t = new Easebuzz(salt, Key, env);
+			Easebuzz t = new Easebuzz(salt, Key, env, "false");
 			string strForm = t.transactionAPI(txnid, amount, email, phone);
 
 			Response.Write(strForm);

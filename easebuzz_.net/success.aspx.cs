@@ -48,7 +48,6 @@ namespace easebuzz_.net
 				if (merc_hash != Request.Form["hash"])
 				{
 					Response.Write("Hash value did not matched");
-
 				}
 				else
 				{

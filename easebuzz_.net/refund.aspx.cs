@@ -20,7 +20,7 @@ namespace easebuzz_.net
 			string amount=Request.Form["amount"].Trim();
 			string email=Request.Form["email"].Trim();
 
-			Easebuzz t = new Easebuzz(salt, Key, env);
+			Easebuzz t = new Easebuzz(salt, Key, env, "false");
             string strForm = t.RefundAPI(txnid, refund_amount, phone, amount, email);
 			Response.Write(strForm);
 

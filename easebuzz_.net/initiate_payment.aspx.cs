@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Web.UI;
 
 namespace easebuzz_.net
@@ -12,7 +13,6 @@ namespace easebuzz_.net
 		public string salt = System.Configuration.ConfigurationSettings.AppSettings["salt"];
         public string Key = System.Configuration.ConfigurationSettings.AppSettings["key"];
 
-		//        public string env = "prod";
 		public string env = System.Configuration.ConfigurationSettings.AppSettings["env"];
 		public string is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
 
@@ -74,12 +74,12 @@ namespace easebuzz_.net
 			{
 				dict.Add("split_payments", split_payments);
 			}
-			if (sub_merchant_id.Length > 0 && split_payments.Length == 0)
+			if (sub_merchant_id.Length > 0)
 			{
 				dict.Add("sub_merchant_id", sub_merchant_id);
 			}
-
-			Easebuzz t = new Easebuzz(salt, Key, env);
+			
+			Easebuzz t = new Easebuzz(salt, Key, env, "false");
 			string result = t.initiatePaymentAPI(dict);
 
 			if (is_enable_iframe == "true") {
@@ -108,6 +108,7 @@ namespace easebuzz_.net
 
 				}
 			}
+			
 		}
 
 	}

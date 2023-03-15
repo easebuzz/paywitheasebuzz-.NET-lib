@@ -35,14 +35,16 @@ namespace easebuzz_.net
 		public string Key = string.Empty;
 		public string env = string.Empty;
 		public string is_enable_iframe;
+		public string is_enable_seamless;
 		string empty_value = "";
 
 
-		public Easebuzz(string SALT, string KEY, string ENV)
+		public Easebuzz(string SALT, string KEY, string ENV, string is_seamless_request)
 		{
 			salt = SALT;
 			Key = KEY;
 			env = ENV;
+			is_enable_seamless = is_seamless_request ?? "false";
 		}
 		// this function is required to initiate payment
 
@@ -83,20 +85,23 @@ namespace easebuzz_.net
 
 				var responseDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Content.ToString());
 
-				is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"];
+				is_enable_iframe = System.Configuration.ConfigurationSettings.AppSettings["enable_iframe"] ?? "false";
 
 				if (responseDict != null && responseDict["status"] == "1")
 				{
 					if (!string.IsNullOrEmpty(responseDict["data"]))
 					{
-						if (is_enable_iframe == "true")
+						if (is_enable_seamless == "true")
+                        {
+							result = responseDict["data"];
+						}
+						else if (is_enable_iframe == "true")
 						{
 							result = responseDict["data"];
 						}
 						else
 						{
 							result = getURL() + "/pay/" + responseDict["data"];
-
 						}
 					}
 				}
@@ -199,16 +204,20 @@ namespace easebuzz_.net
 		//get url using env varibale
 		public string getURL()
 		{
+			string paymentUrl = "";
 			if (env == "test")
 			{
-				string paymentUrl = "https://testpay.easebuzz.in";
-				return paymentUrl;
+				paymentUrl = "https://testpay.easebuzz.in";
+			}
+			else if (env == "prod")
+			{
+				paymentUrl = "https://pay.easebuzz.in";
 			}
 			else
-			{
-				string paymentUrl = "https://pay.easebuzz.in";
-				return paymentUrl;
+            {
+				paymentUrl = "https://testpay.easebuzz.in";
 			}
+			return paymentUrl;
 		}
 
 		//initiate refund api 

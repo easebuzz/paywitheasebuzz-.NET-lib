@@ -24,7 +24,7 @@ namespace easebuzz_.net
 			string merchant_email = Request.Form["email"].Trim();
             
 			string transaction_date = Request.Form["transaction_date"].Trim();
-            Easebuzz t = new Easebuzz(salt, Key, env);
+            Easebuzz t = new Easebuzz(salt, Key, env, "false");
             string strForm = t.transactionDateAPI(merchant_email, transaction_date);
             
             Response.Write(strForm);

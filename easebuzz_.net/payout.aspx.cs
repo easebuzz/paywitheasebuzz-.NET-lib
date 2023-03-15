@@ -18,7 +18,7 @@ namespace easebuzz_.net
 			string merchant_email = Request.Form["merchant_email"].Trim();
             
 			string payout_date = Request.Form["payout_date"].Trim();
-            Easebuzz t = new Easebuzz(salt, Key, env);
+            Easebuzz t = new Easebuzz(salt, Key, env, "false");
             string strForm = t.payoutAPI(merchant_email, payout_date);
            
  
