@@ -136,7 +136,7 @@ https://docs.easebuzz.in/
 
     ```
 
-    2.3 Pass all required parameters to initiate payment api using Dictionary<string, string> (Sample show as the below)
+    3.3 Pass all required parameters to initiate payment api using Dictionary<string, string> (Sample show as the below)
 
     ```
 		Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -162,9 +162,9 @@ https://docs.easebuzz.in/
 		dict.Add("request_flow", "SEAMLESS"); // This is mandatory for seamless
 	```
 
-2.3 Once you receive access key then you can use the below code for card encryption and pass all values to seamless api.
+	3.4 Once you receive access key then you can use the below code for card encryption and pass all values to seamless api.
 
-   ```
+  	```
     	string encodedKey = ComputeSha256Hash(Key).Substring(0, 32);
 		string encodedIv = ComputeSha256Hash(salt).Substring(0, 16);
 		
